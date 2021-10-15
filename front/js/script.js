@@ -4,7 +4,7 @@ function main() {
   getArticles();
 }
 
-// Récupérer les articles depuis l'API
+// Récupérer les data de l'api
 function getArticles() {
   fetch("http://localhost:3000/api/products")
     .then(function (res) {
@@ -13,7 +13,7 @@ function getArticles() {
     .catch((error) => {
       let productsContainer = document.querySelector(".items");
       productsContainer.innerHTML =
-        "Nous n'avons pas réussi à afficher nos nounours. Avez vous bien lancé le serveur local (Port 3000) ? <br>Si le problème persiste, contactez-nous.";
+        "Nous n'avons pas réussi à afficher les canapés";
       productsContainer.style.textAlign = "center";
       productsContainer.style.padding = "30vh 0";
     })
