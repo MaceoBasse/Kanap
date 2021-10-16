@@ -68,6 +68,8 @@ function getProduct() {
             option_produit: choixFormulaire,
             quantité: quantitéFormulaire,
             prix: articles.price,
+            Produit_img:articles.imageUrl,
+            Produit_alt:articles.altTxt,
           };
           console.log(optionsProduit);
           // Local Storage
