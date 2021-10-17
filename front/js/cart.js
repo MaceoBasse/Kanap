@@ -2,6 +2,7 @@ main();
 
 function main() {
   Display();
+  Form();
 }
 
 function Display() {
@@ -119,7 +120,7 @@ function Display() {
         });
       }
       itemQuantity.addEventListener("change", function () {
-        var r2 = itemQuantity.closest("article");
+        let r2 = itemQuantity.closest("article");
         console.log(r2.getAttribute("data-id"));
         dom_id = r2.getAttribute("data-id");
         for (let k = 0; k < ProduitEnregistrelocalstrorage.length; k++) {
@@ -142,4 +143,56 @@ function Display() {
     console.log("il n'y as pas de produit dans le panier");
   }
 }
-function EmptyCard() {}
+function Form() {
+  let inputName = document.querySelector("#firstName");
+  let inputLastName = document.querySelector("#lastname");
+  let inputAdress = document.querySelector("#adress");
+  let inputCity = document.querySelector("#city");
+  let inputMail = document.querySelector("#email");
+  let erreur = document.querySelector(".erreur");
+  const submit = document.querySelector("#firstNameErrorMsg");
+
+  submit.addEventListener("click", (e) => {
+    let produitAchete = [];
+    produitAchete.push(
+      (ProduitEnregistrelocalstrorage = JSON.parse(
+        localStorage.getItem("produit")
+      ))
+    );
+    const order = {
+      contact: {
+        firstName: inputName.value,
+        lastName: inputLastName.value,
+        city: inputCity.value,
+        address: inputAdress.value,
+        email: inputMail.value,
+      },
+      produit: produitAchete,
+    };
+
+    // requete post
+    let totalPrice = document.getElementById("totalPrice");
+    totalPrice.innerHTML = totalPrix;
+    console.log(totalPrix);
+
+    const options = {
+      method: "POST",
+      body: JSON.stringify(order),
+      headers: { "Content-Type": "application/json" },
+    };
+
+    fetch("http://localhost:3000/api/order", options)
+      .then((response) => response.json())
+      .then((data) => {
+        localStorage.clear();
+        console.log(data);
+        localStorage.setItem("orderId", data.orderId);
+        localStorage.setItem("total", totalPrix);
+
+        //  document.location.href = "confirmation.html";
+      })
+      .catch((err) => {
+        alert("Il y a eu une erreur : " + err);
+      });
+  });
+}
