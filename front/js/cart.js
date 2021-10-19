@@ -4,11 +4,9 @@ function main() {
   var str = document.URL;
   var url = new URL(str);
   if (url == "http://127.0.0.1:5500/front/html/cart.html") {
-    console.log("panier");
     Display();
     Form();
   } else {
-    console.log("confirmation");
     Confirmation();
   }
 }
@@ -146,8 +144,16 @@ function Display() {
         }
       });
     }
+    if (ProduitEnregistrelocalstrorage == 0) {
+      const positionEmptyCart = document.querySelector("#cart__items");
+      const emptyCart = `<p>Votre panier est vide</p>`;
+      positionEmptyCart.innerHTML = emptyCart;
+      console.log("il n'y as pas de produit dans le panier");
+    }
   } else {
-    ProduitEnregistrelocalstrorage = [];
+    const positionEmptyCart = document.querySelector("#cart__items");
+    const emptyCart = `<p>Votre panier est vide</p>`;
+    positionEmptyCart.innerHTML = emptyCart;
     console.log("il n'y as pas de produit dans le panier");
   }
 }
@@ -207,7 +213,7 @@ function Form() {
           address: inputAdress.value,
           email: inputMail.value,
         },
-        produit: produitAchete,
+        products: produitAchete,
       };
       console.log(order);
 
@@ -222,6 +228,7 @@ function Form() {
         body: JSON.stringify(order),
         headers: { "Content-Type": "application/json" },
       };
+      console.log(JSON.stringify(order));
       console.log(options);
 
       fetch("http://localhost:3000/api/order", options)
