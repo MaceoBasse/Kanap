@@ -80,6 +80,7 @@ function getProduct() {
           console.log(ProduitEnregistrelocalstrorage);
           // si il y deja des produit dans le localSTorage
           if (ProduitEnregistrelocalstrorage) {
+
             ProduitEnregistrelocalstrorage.push(optionsProduit);
             localStorage.setItem(
               "produit",
@@ -87,7 +88,7 @@ function getProduct() {
             );
             console.log(ProduitEnregistrelocalstrorage);
 
-            // si il n'y a pas de produit dans le localSTorage
+          // si il n'y a pas de produit dans le localSTorage
           } else {
             ProduitEnregistrelocalstrorage = [];
             ProduitEnregistrelocalstrorage.push(optionsProduit);

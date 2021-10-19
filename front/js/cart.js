@@ -198,13 +198,14 @@ function Form() {
       inputMailErreur.innerHTML = "Vous devez renseigner un mail valide";
       e.preventDefault();
     } else {
-      console.log("ok");
       let produitAchete = [];
-      produitAchete.push(
-        (ProduitEnregistrelocalstrorage = JSON.parse(
-          localStorage.getItem("produit")
-        ))
+      let ProduitEnregistrelocalstrorage = JSON.parse(
+        localStorage.getItem("produit")
       );
+      console.log(ProduitEnregistrelocalstrorage.id_Produit);
+      for (let j = 0; j < ProduitEnregistrelocalstrorage.length; j++) {
+        produitAchete.push(ProduitEnregistrelocalstrorage[j].id_Produit);
+      }
       const order = {
         contact: {
           firstName: inputName.value,
@@ -224,21 +225,22 @@ function Form() {
 
       const options = {
         method: "POST",
-        mode: "no-cors",
+        // mode: "no-cors",
         body: JSON.stringify(order),
         headers: { "Content-Type": "application/json" },
       };
       console.log(JSON.stringify(order));
       console.log(options);
 
-      fetch("http://localhost:3000/api/order", options)
+      fetch("http://localhost:3000/api/products/order", options)
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
-          localStorage.setItem("orderId", data.orderId);
-          localStorage.setItem("total", totalPrix);
-          console.log(response);
-          document.location.href = `confirmation.html?id=order_id`;
+          console.log(data.orderId);
+          // localStorage.setItem("orderId", data.orderId);
+          // localStorage.setItem("total", totalPrix);
+
+          document.location.href = `confirmation.html?id=${data.orderId}`
         })
         .catch((err) => {
           alert("Il y a eu une erreur : " + err);
