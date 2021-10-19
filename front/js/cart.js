@@ -1,8 +1,16 @@
 main();
 
 function main() {
-  Display();
-  Form();
+  var str = document.URL;
+  var url = new URL(str);
+  if (url == "http://127.0.0.1:5500/front/html/cart.html") {
+    console.log("panier");
+    Display();
+    Form();
+  } else {
+    console.log("confirmation");
+    Confirmation();
+  }
 }
 
 function Display() {
@@ -145,54 +153,105 @@ function Display() {
 }
 function Form() {
   let inputName = document.querySelector("#firstName");
-  let inputLastName = document.querySelector("#lastname");
-  let inputAdress = document.querySelector("#adress");
+  let inputNameErreur = document.querySelector("#firstNameErrorMsg");
+  let inputLastName = document.querySelector("#lastName");
+  let inputLastErreur = document.querySelector("#lastNameErrorMsg");
+  let inputAdress = document.querySelector("#address");
+  let inputAdressErreur = document.querySelector("#addressErrorMsg");
   let inputCity = document.querySelector("#city");
+  let inputCityErreur = document.querySelector("#cityErrorMsg");
   let inputMail = document.querySelector("#email");
-  let erreur = document.querySelector(".erreur");
-  const submit = document.querySelector("#firstNameErrorMsg");
+  let inputMailErreur = document.querySelector("#emailErrorMsg");
+  const submit = document.querySelector("#order");
 
   submit.addEventListener("click", (e) => {
-    let produitAchete = [];
-    produitAchete.push(
-      (ProduitEnregistrelocalstrorage = JSON.parse(
-        localStorage.getItem("produit")
-      ))
-    );
-    const order = {
-      contact: {
-        firstName: inputName.value,
-        lastName: inputLastName.value,
-        city: inputCity.value,
-        address: inputAdress.value,
-        email: inputMail.value,
-      },
-      produit: produitAchete,
-    };
+    //reset
+    inputNameErreur.innerHTML = "";
+    inputLastErreur.innerHTML = "";
+    inputCityErreur.innerHTML = "";
+    inputAdressErreur.innerHTML = "";
+    inputMailErreur.innerHTML = "";
+    //check value
+    e.preventDefault();
+    if (!inputName.value) {
+      inputNameErreur.innerHTML = "Vous devez renseigner un prénom";
+      e.preventDefault();
+    } else if (!inputLastName.value) {
+      inputLastErreur.innerHTML = "Vous devez renseigner un nom";
+      e.preventDefault();
+    } else if (!inputCity.value) {
+      inputCityErreur.innerHTML = "Vous devez renseigner une ville";
+      e.preventDefault();
+    } else if (!inputAdress.value) {
+      inputAdressErreur.innerHTML = "Vous devez renseigner une adresse";
+      e.preventDefault();
+    } else if (!inputMail.value) {
+      inputMailErreur.innerHTML = "Vous devez renseigner un mail";
+      e.preventDefault();
+    } else if (!validateEmail(inputMail.value)) {
+      inputMailErreur.innerHTML = "Vous devez renseigner un mail valide";
+      e.preventDefault();
+    } else {
+      console.log("ok");
+      let produitAchete = [];
+      produitAchete.push(
+        (ProduitEnregistrelocalstrorage = JSON.parse(
+          localStorage.getItem("produit")
+        ))
+      );
+      const order = {
+        contact: {
+          firstName: inputName.value,
+          lastName: inputLastName.value,
+          city: inputCity.value,
+          address: inputAdress.value,
+          email: inputMail.value,
+        },
+        produit: produitAchete,
+      };
+      console.log(order);
 
-    // requete post
-    let totalPrice = document.getElementById("totalPrice");
-    totalPrice.innerHTML = totalPrix;
-    console.log(totalPrix);
+      // requete post
+      let totalPrice = document.getElementById("totalPrice");
+      totalPrice.innerHTML = totalPrix;
+      // console.log(totalPrix);
 
-    const options = {
-      method: "POST",
-      body: JSON.stringify(order),
-      headers: { "Content-Type": "application/json" },
-    };
+      const options = {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(order),
+        headers: { "Content-Type": "application/json" },
+      };
+      console.log(options);
 
-    fetch("http://localhost:3000/api/order", options)
-      .then((response) => response.json())
-      .then((data) => {
-        localStorage.clear();
-        console.log(data);
-        localStorage.setItem("orderId", data.orderId);
-        localStorage.setItem("total", totalPrix);
-
-        //  document.location.href = "confirmation.html";
-      })
-      .catch((err) => {
-        alert("Il y a eu une erreur : " + err);
-      });
+      fetch("http://localhost:3000/api/order", options)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          localStorage.setItem("orderId", data.orderId);
+          localStorage.setItem("total", totalPrix);
+          console.log(response);
+          document.location.href = `confirmation.html?id=order_id`;
+        })
+        .catch((err) => {
+          alert("Il y a eu une erreur : " + err);
+        });
+    }
   });
+}
+function Confirmation() {
+  var str = document.URL;
+  var url = new URL(str);
+  var search_params = new URLSearchParams(url.search);
+  if (search_params.has("id")) {
+    var Commande_id = search_params.get("id");
+    console.log(Commande_id);
+
+    let orderId = document.getElementById("orderId");
+    orderId.innerHTML = Commande_id;
+  }
+}
+function validateEmail(email) {
+  var re = /\S+@\S+\.\S+/;
+  return re.test(email);
 }
