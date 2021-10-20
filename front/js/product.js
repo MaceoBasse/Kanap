@@ -68,11 +68,19 @@ function getProduct() {
             option_produit: choixFormulaire,
             quantité: quantitéFormulaire,
             prix: articles.price,
-            Produit_img:articles.imageUrl,
-            Produit_alt:articles.altTxt,
+            Produit_img: articles.imageUrl,
+            Produit_alt: articles.altTxt,
           };
           console.log(optionsProduit);
           // Local Storage
+          const popupConfirmation = () => {
+            if (
+              window.confirm(`Votre commande de ${quantitéFormulaire} ${articles.name} ${choixFormulaire} est ajoutée au panier
+Pour consulter votre panier, cliquez sur OK`)
+            ) {
+              window.location.href = "cart.html";
+            }
+          };
 
           let ProduitEnregistrelocalstrorage = JSON.parse(
             localStorage.getItem("produit")
@@ -80,15 +88,37 @@ function getProduct() {
           console.log(ProduitEnregistrelocalstrorage);
           // si il y deja des produit dans le localSTorage
           if (ProduitEnregistrelocalstrorage) {
-
-            ProduitEnregistrelocalstrorage.push(optionsProduit);
-            localStorage.setItem(
-              "produit",
-              JSON.stringify(ProduitEnregistrelocalstrorage)
+            const productFind = ProduitEnregistrelocalstrorage.find(
+              (el) =>
+                el.id_Produit === articles._id &&
+                el.option_produit === choixFormulaire
             );
-            console.log(ProduitEnregistrelocalstrorage);
+            if (productFind) {
+              console.log("il y a déja ce produit");
+              console.log(productFind);
+              let newQuantity =
+                parseInt(optionsProduit.quantité) +
+                parseInt(productFind.quantité);
+              productFind.quantité = newQuantity;
+              console.log(productFind.quantiteProduit);
+              localStorage.setItem(
+                "produit",
+                JSON.stringify(ProduitEnregistrelocalstrorage)
+              );
+              console.table(ProduitEnregistrelocalstrorage);
+              popupConfirmation();
+            } else {
+              console.log("il n'y a pas deux fois le meme produit");
+              ProduitEnregistrelocalstrorage.push(optionsProduit);
+              localStorage.setItem(
+                "produit",
+                JSON.stringify(ProduitEnregistrelocalstrorage)
+              );
+              console.table(ProduitEnregistrelocalstrorage);
+              popupConfirmation();
+            }
 
-          // si il n'y a pas de produit dans le localSTorage
+            // si il n'y a pas de produit dans le localSTorage
           } else {
             ProduitEnregistrelocalstrorage = [];
             ProduitEnregistrelocalstrorage.push(optionsProduit);
@@ -96,8 +126,8 @@ function getProduct() {
               "produit",
               JSON.stringify(ProduitEnregistrelocalstrorage)
             );
-            console.log(ProduitEnregistrelocalstrorage);
-            window.alert("Votre canapé a bien été ajouté au panier.");
+            // console.log(ProduitEnregistrelocalstrorage);
+            // window.alert("Votre canapé a bien été ajouté au panier.");
           }
         }
       });

@@ -221,11 +221,9 @@ function Form() {
       // requete post
       let totalPrice = document.getElementById("totalPrice");
       totalPrice.innerHTML = totalPrix;
-      // console.log(totalPrix);
 
       const options = {
         method: "POST",
-        // mode: "no-cors",
         body: JSON.stringify(order),
         headers: { "Content-Type": "application/json" },
       };
@@ -237,10 +235,8 @@ function Form() {
         .then((data) => {
           console.log(data);
           console.log(data.orderId);
-          // localStorage.setItem("orderId", data.orderId);
-          // localStorage.setItem("total", totalPrix);
-
-          document.location.href = `confirmation.html?id=${data.orderId}`
+          localStorage.clear();
+          document.location.href = `confirmation.html?id=${data.orderId}`;
         })
         .catch((err) => {
           alert("Il y a eu une erreur : " + err);
