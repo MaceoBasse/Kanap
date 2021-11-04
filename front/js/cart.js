@@ -21,7 +21,6 @@ function Display() {
     let arrayQuantity = [];
     let arrayPrice = [];
     for (var i = 0; i < ProduitEnregistrelocalstrorage.length; i++) {
-      // console.log(ProduitEnregistrelocalstrorage[i]);
 
       let productArticle = document.createElement("article");
       document.getElementById("cart__items").appendChild(productArticle);
@@ -88,7 +87,8 @@ function Display() {
       deleteItem.classList.add("deleteItem");
 
       arrayQuantity.push(parseInt(ProduitEnregistrelocalstrorage[i].quantité));
-
+      
+      //total panier
       totalQuantité = arrayQuantity.reduce(function (a, b) {
         return a + b;
       });
@@ -110,7 +110,7 @@ function Display() {
 
       supprimerSelection = Array.from(document.querySelectorAll(".deleteItem"));
       let tab = [];
-      // supprimer element
+      // supprimer un element
       for (let i = 0; i < supprimerSelection.length; i++) {
         supprimerSelection[i].addEventListener("click", () => {
           tab = ProduitEnregistrelocalstrorage;
@@ -125,6 +125,7 @@ function Display() {
           window.location.href = "cart.html";
         });
       }
+      // changer la quantité
       itemQuantity.addEventListener("change", function () {
         let r2 = itemQuantity.closest("article");
         console.log(r2.getAttribute("data-id"));
@@ -158,6 +159,7 @@ function Display() {
   }
 }
 function Form() {
+  // DOM
   let inputName = document.querySelector("#firstName");
   let inputNameErreur = document.querySelector("#firstNameErrorMsg");
   let inputLastName = document.querySelector("#lastName");
@@ -171,7 +173,7 @@ function Form() {
   const submit = document.querySelector("#order");
 
   submit.addEventListener("click", (e) => {
-    //reset
+    //reset value
     inputNameErreur.innerHTML = "";
     inputLastErreur.innerHTML = "";
     inputCityErreur.innerHTML = "";
@@ -218,7 +220,8 @@ function Form() {
       };
       console.log(order);
 
-      // requete post
+      // requete POST
+
       let totalPrice = document.getElementById("totalPrice");
       totalPrice.innerHTML = totalPrix;
 
@@ -245,9 +248,11 @@ function Form() {
   });
 }
 function Confirmation() {
+  // recupération de URL
   var str = document.URL;
   var url = new URL(str);
   var search_params = new URLSearchParams(url.search);
+  // je garde l'ID
   if (search_params.has("id")) {
     var Commande_id = search_params.get("id");
     console.log(Commande_id);
@@ -257,6 +262,7 @@ function Confirmation() {
   }
 }
 function validateEmail(email) {
+  // REGEX
   var re = /\S+@\S+\.\S+/;
   return re.test(email);
 }

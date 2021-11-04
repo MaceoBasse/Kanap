@@ -38,12 +38,12 @@ function getArticles() {
         let productTitle = document.createElement("h3");
         productArticle.appendChild(productTitle);
         productTitle.classList.add("productName");
-        productTitle.innerHTML  = resultatAPI[article].name;
+        productTitle.innerHTML = resultatAPI[article].name;
 
         let productDescription = document.createElement("p");
         productArticle.appendChild(productDescription);
         productDescription.classList.add("productDescription");
-        productDescription.innerHTML  = resultatAPI[article].description;
+        productDescription.innerHTML = resultatAPI[article].description;
       }
     });
 }

@@ -5,13 +5,13 @@ function getProduct() {
   if (search_params.has("id")) {
     var ProductUrl =
       "http://localhost:3000/api/products/" + search_params.get("id");
-    // console.log(ProductUrl);
   }
   fetch(ProductUrl)
     .then(function (res) {
       return res.json();
     })
     .catch((error) => {
+      // si il n'y a pas de produit dans le panier
       let productsContainer = document.querySelector(".item");
       productsContainer.innerHTML =
         "Nous n'avons pas réussi à afficher les canapés";
@@ -22,7 +22,6 @@ function getProduct() {
     // DOM
     .then(function (resultatAPI) {
       const articles = resultatAPI;
-      //   console.log(articles);
       let productImg = document.createElement("img");
       document.querySelector(".item__img").appendChild(productImg);
       productImg.src = articles.imageUrl;
@@ -39,7 +38,6 @@ function getProduct() {
 
       select = document.getElementById("colors");
       for (let index in articles.colors) {
-        // console.log(articles.colors[index]);
         i = articles.colors[index];
         var opt = document.createElement("option");
         opt.value = i;
@@ -49,14 +47,10 @@ function getProduct() {
 
       const btn = document.getElementById("addToCart");
       btn.addEventListener("click", (e) => {
-        // console.log(`Button is clicked!`);
-
         const choixFormulaire = select.value;
-        // console.log(choixFormulaire);
 
         quantity = document.getElementById("quantity");
         const quantitéFormulaire = quantity.value;
-        // console.log(quantitéFormulaire);
         if (quantitéFormulaire == 0) {
           alert("Tu n'a pas choisi la quantité");
         } else if (choixFormulaire == "") {
@@ -126,8 +120,6 @@ Pour consulter votre panier, cliquez sur OK`)
               "produit",
               JSON.stringify(ProduitEnregistrelocalstrorage)
             );
-            // console.log(ProduitEnregistrelocalstrorage);
-            // window.alert("Votre canapé a bien été ajouté au panier.");
           }
         }
       });
